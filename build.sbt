@@ -132,6 +132,7 @@ lazy val `backend` = (project in file("backend-service"))
     resolvers ++= defaultResolvers,
     libraryDependencies ++= Seq(
       "org.jsoup" % "jsoup" % "1.18.3",
+      "org.playframework" %% "play-json" % "3.0.4",
     )
   )
   .enablePlugins(AkkaGrpcPlugin, JavaAppPackaging, DockerPlugin)
