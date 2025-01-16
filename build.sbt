@@ -123,3 +123,15 @@ lazy val root = (project in file("."))
     resolvers ++= defaultResolvers
   )
   .enablePlugins(AkkaGrpcPlugin, JavaAppPackaging, DockerPlugin)
+
+
+lazy val `backend` = (project in file("backend-service"))
+  .settings(
+    defaultSettings,
+    libraryDependencies ++= defaultLibs,
+    resolvers ++= defaultResolvers,
+    libraryDependencies ++= Seq(
+      "org.jsoup" % "jsoup" % "1.18.3",
+    )
+  )
+  .enablePlugins(AkkaGrpcPlugin, JavaAppPackaging, DockerPlugin)
