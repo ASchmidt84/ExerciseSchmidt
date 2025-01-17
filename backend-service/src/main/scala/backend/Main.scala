@@ -62,7 +62,7 @@ object Main {
 
 
     system
-      .scheduler
+      .scheduler //Hier könnte noch der Delay über die Config angepasst werden. Wenn gefordert
       .scheduleWithFixedDelay(5.seconds,5.minutes){ () => {
         import system._
         DataCollector.callBlogEntries(system.settings.config.getString("url.blogentry"))(system.executionContext)
