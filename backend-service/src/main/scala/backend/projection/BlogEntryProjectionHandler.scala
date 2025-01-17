@@ -43,9 +43,11 @@ class BlogEntryProjectionHandler(slice: String,
               }
             }
             val sourceMsg: Source[Message, NotUsed] = Source
-              .single(TextMessage(Json.toJson(summary.countedMapScala).toString()))
+              .single(TextMessage.Strict(Json.toJson(summary.countedMapScala).toString()))
+
             val flow: Flow[Message, Message, Future[Done]] = Flow
               .fromSinkAndSourceMat(sinkMsg, sourceMsg)(Keep.left)
+
             val (upgradeResponse, closed) = Http()
               .singleWebSocketRequest(WebSocketRequest(targetUrl), flow)
 

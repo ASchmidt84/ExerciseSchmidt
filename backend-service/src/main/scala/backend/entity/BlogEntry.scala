@@ -67,9 +67,9 @@ object BlogEntry {
      * Wortliste in lowerCase und bereinigt von Satzzeichen
      */
     lazy val wordList: Seq[String] = textWithoutHtml
-      .split("\\W")
+      .split("\\P{IsAlphabetic}").toList
       .filter(_.trim.nonEmpty)
-      .map(_.replaceAll("\\W","").toLowerCase.trim)
+      .map(_.toLowerCase.trim)
 
     /**
      * Rekursive Methode zum Zählen!
@@ -213,7 +213,7 @@ object BlogEntry {
         eventHandler = (state,event) => handleEvent(state,event)
       )
       .withRetention(
-        RetentionCriteria.snapshotEvery(numberOfEvents = 400, keepNSnapshots = 100)
+        RetentionCriteria.snapshotEvery(numberOfEvents = 400)
       )
       .onPersistFailure(
         SupervisorStrategy.restartWithBackoff(200.millis, 5.seconds, 0.1)

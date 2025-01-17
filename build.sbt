@@ -83,6 +83,7 @@ val defaultLibs = Seq(
   "com.typesafe.akka" %% "akka-cluster-sharding-typed" % AkkaVersion,
   "com.typesafe.akka" %% "akka-actor-testkit-typed" % AkkaVersion % Test,
   "com.typesafe.akka" %% "akka-stream-testkit" % AkkaVersion % Test,
+  "com.typesafe.akka" %% "akka-http-testkit" % AkkaHttpVersion % Test,
   // Akka Management powers Health Checks, Akka Cluster Bootstrapping, and Akka Diagnostics
   "com.lightbend.akka.management" %% "akka-management" % AkkaManagementVersion,
   "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
@@ -132,6 +133,18 @@ lazy val `backend` = (project in file("backend-service"))
     resolvers ++= defaultResolvers,
     libraryDependencies ++= Seq(
       "org.jsoup" % "jsoup" % "1.18.3",
+      "org.playframework" %% "play-json" % "3.0.4",
+    )
+  )
+  .enablePlugins(AkkaGrpcPlugin, JavaAppPackaging, DockerPlugin)
+
+
+lazy val `frontend` = (project in file("frontend-service"))
+  .settings(
+    defaultSettings,
+    libraryDependencies ++= defaultLibs,
+    resolvers ++= defaultResolvers,
+    libraryDependencies ++= Seq(
       "org.playframework" %% "play-json" % "3.0.4",
     )
   )

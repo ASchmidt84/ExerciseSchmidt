@@ -23,8 +23,9 @@ object BlogEntryProjection {
     def sourceProvider(sliceRange: Range): SourceProvider[Offset, EventEnvelope[BlogEntry.Event]] = {
       EventSourcedProvider
         .eventsBySlices[BlogEntry.Event](
-          system, readJournalPluginId = R2dbcReadJournal.Identifier,
-          "BlockEntry",
+          system,
+          readJournalPluginId = R2dbcReadJournal.Identifier,
+          "BlogEntry",
           sliceRange.min, sliceRange.max
         )
     }
@@ -32,7 +33,7 @@ object BlogEntryProjection {
     def projection(sliceRange: Range): Projection[EventEnvelope[BlogEntry.Event]] = {
       val minSlice = sliceRange.min
       val maxSlice = sliceRange.max
-      val projectionId = ProjectionId("BlockEntryProjection",s"block-entry-$minSlice-$maxSlice")
+      val projectionId = ProjectionId("BlogEntryProjection",s"blog-entry-$minSlice-$maxSlice")
 
       R2dbcProjection.exactlyOnce(
         projectionId,
@@ -40,15 +41,15 @@ object BlogEntryProjection {
         sourceProvider(sliceRange),
         handler = () =>
           new BlogEntryProjectionHandler(
-            s"block-entry-$minSlice-$maxSlice", system, targetSendingUrl
+            s"blog-entry-$minSlice-$maxSlice", system, targetSendingUrl
           )
       )(system)
     }
 
     ShardedDaemonProcess(system)
       .initWithContext(
-        name = "BlockEntryProjection",
-        initialNumberOfInstances = 4,
+        name = "BlogEntryProjection",
+        initialNumberOfInstances = 1,
         behaviorFactory = {daemonCtx =>
           val sliceRanges = EventSourcedProvider.sliceRanges(
             system, R2dbcReadJournal.Identifier, daemonCtx.totalProcesses
