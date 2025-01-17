@@ -1,0 +1,34 @@
+version: '2.2'
+services:
+  postgres-db:
+    image: postgres:latest
+    container_name: postgres-db
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: schmidt
+      POSTGRES_USER: schmidt
+      POSTGRES_PASSWORD: schmidt
+    healthcheck:
+      test: [ 'CMD', 'pg_isready', "-q", "-d", "schmidt", "-U", "schmidt" ]
+      interval: 5s
+      retries: 5
+      start_period: 5s
+      timeout: 5s
+
+  # this second PostgreSQL is used when running test
+  postgres-db-test:
+    image: postgres:latest
+    container_name: postgres-db_test
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_DB: schmidt-test
+      POSTGRES_USER: schmidt
+      POSTGRES_PASSWORD: schmidt
+    healthcheck:
+      test: [ 'CMD', 'pg_isready', "-q", "-d", "schmidt-test", "-U", "schmidt" ]
+      interval: 5s
+      retries: 5
+      start_period: 5s
+      timeout: 5s
