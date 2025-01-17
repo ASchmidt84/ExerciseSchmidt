@@ -33,7 +33,7 @@ class BlogEntryProjectionHandler(slice: String,
    */
   override def process(session: R2dbcSession,
                        envelope: EventEnvelope[BlogEntry.Event]): Future[Done] = envelope.event match {
-    case BlogEntry.Created(_,_,_,_,entityId,_) =>
+    case BlogEntry.Created(_,_,_,_,entityId) =>
       convertError(entity(entityId).askWithStatus(reply => BlogEntry.Get(reply)))
         .map{
           summary =>

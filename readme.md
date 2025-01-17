@@ -55,3 +55,13 @@ sbt
 project backend
 run
 ```
+
+#### Frontend starten
+
+Das Frontend ist am besten aus einer IDE (JetBrains) zu starten. Der Webserver ist ganz klein gehalten. Mit Enter kann dann in der Konsole der Webserver beendet werden.
+
+### Anmerkungen und Erwartungen
+
+Ich habe einfache Test's geschrieben. Vor allem wo es wichtig ist. 
+Der Abruf der Quelle ist auch getestet. Dabei auch die Konvertierung.
+Grundsätzlich ist dies ein stabiler Quellcode.

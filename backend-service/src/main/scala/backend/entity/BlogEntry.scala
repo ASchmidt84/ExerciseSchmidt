@@ -94,7 +94,6 @@ object BlogEntry {
   // --------- EVENT ------------------------------------------------------
 
   sealed trait Event extends CborSerializable {
-    def eventTime: ZonedDateTime
     def entityId: String
   }
 
@@ -102,8 +101,7 @@ object BlogEntry {
                            title: String,
                            entryCreateDate: ZonedDateTime,
                            text: String,
-                           entityId: String,
-                           eventTime: ZonedDateTime = ZonedDateTime.now) extends Event
+                           entityId: String) extends Event
 
   // --------- STATE ------------------------------------------------------
 
@@ -179,7 +177,7 @@ object BlogEntry {
    */
   private def handleEvent(state: State,
                           event: Event): State = event match {
-    case Created(id,title,date,txt,_,_) =>
+    case Created(id,title,date,txt,_) =>
       state.copy(
         id = Some(id), title = Some(title),
         entryCreateDate = Some(date), blogEntryText = Some(txt)
