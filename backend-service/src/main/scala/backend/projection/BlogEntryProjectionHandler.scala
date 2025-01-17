@@ -5,22 +5,32 @@ import akka.actor.typed.ActorSystem
 import akka.persistence.query.typed.EventEnvelope
 import akka.projection.r2dbc.scaladsl.{R2dbcHandler, R2dbcSession}
 import backend.entity.BlogEntry
-import akka.cluster.sharding.typed.scaladsl.EntityRef
-import akka.grpc.GrpcServiceException
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.model.ws.{Message, TextMessage, WebSocketRequest}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
-import io.grpc.Status
 import org.slf4j.LoggerFactory
 import play.api.libs.json.Json
-import scala.concurrent.{ExecutionContext, Future, TimeoutException}
+import scala.concurrent.Future
 
+/**
+ * Erstellt hier keine DB Projektionen, sondern sorgt dafür,
+ * dass an das Frontend etwas geschickt wird.
+ * @param slice ignoriert werden
+ * @param system
+ * @param targetUrl Zielurl für den Webservice
+ */
 class BlogEntryProjectionHandler(slice: String,
                                  protected implicit val system: ActorSystem[_],
                                  targetUrl: String) extends R2dbcHandler[EventEnvelope[BlogEntry.Event]] with EntityAccess {
   private val logger = LoggerFactory.getLogger("BlogEntry.ProjectionHandler")
 
+  /**
+   * Ist die Methode, die das Verhalten implementiert und bei einem Event aufgerufen wird
+   * @param session
+   * @param envelope
+   * @return
+   */
   override def process(session: R2dbcSession,
                        envelope: EventEnvelope[BlogEntry.Event]): Future[Done] = envelope.event match {
     case BlogEntry.Created(_,_,_,_,entityId,_) =>
