@@ -140,6 +140,9 @@ object BlogEntry {
                             command: Command): ReplyEvent  = command match {
     case g if state.isEmpty => handleCreateCmd(entityId,state,g)
 
+    case x: Create => //Wurde bereits angelegt.
+      Effect.reply(x.replyTo)(StatusReply.Success(state.toSummary))
+
     case Get(reply) =>
       Effect.reply(reply)(StatusReply.Success(state.toSummary))
 
